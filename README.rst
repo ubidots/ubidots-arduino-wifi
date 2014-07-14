@@ -58,6 +58,7 @@ Please pay close attention to the format of ctext,
 .. code-block:: cpp
 
    String ctext=",  \"context\":{\"color\":\"blue\",\"status\":\"active\"}}";
+
 Is required to send "}",  or the function will not work , the format of the content text is  ", \"context\":{}}" inside the brackets you can add the information to the feature you want, but you must follow the format of the example.
 
 API Reference
@@ -115,8 +116,8 @@ WifiCon()
 ==============  ===========  =================================================
 Type            Argument     Description
 ==============  ===========  =================================================
-String          ssid         The SSID of your WiFi red
-String          pass         The pass of your WiFi red
+String          ssid         The SSID of your WiFi network
+String          pass         The pass of your WiFi network
 String          status       is the value of the initialization status of WiFi
 String          api          Your API Key number
 ==============  ===========  =================================================
