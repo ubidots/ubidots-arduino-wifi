@@ -2,8 +2,10 @@ Ubidots-Arduino
 ===============
 
 Ubidots-Arduino is an Arduino library for interacting with Ubidots through its API. 
-The library also contains the code to connect to your WiFi network
+The library also contains the code to connect to your WiFi network.
 
+Note: This code has been tested ONLY with the official Arduino WiFi Shield: http://arduino.cc/en/Main/ArduinoWiFiShield
+We can't guarantee that it will work with different WiFi modules.
 
 A Quick example
 ----------------
