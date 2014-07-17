@@ -99,14 +99,18 @@ Please pay close attention to the format of ctext,
 It is required to send "}",  or the function will not work , the format of the content text is  ", \"context\":{}}" inside the brackets you can add the information to the feature you want, as long as you follow the format of the example.
 Example:
 You post a context then:
+
 .. code-block:: cpp
 
    String ctext=",  \"context\":{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}}";
+
 If you dont need a context then:
 You post a context then:
+
 .. code-block:: cpp
 
    String ctext="}";
+
 
 API Reference
 -------------
