@@ -7,6 +7,18 @@ The library also contains the code to connect to your WiFi network.
 Note: This code has been tested ONLY with the official Arduino WiFi Shield: http://arduino.cc/en/Main/ArduinoWiFiShield
 We can't guarantee that it will work with different WiFi modules.
 
+Install the Library
+-------------------
+
+1. Download the library as a ZIP file here: https://github.com/ubidots/ubidots-arduino/blob/master/Library/Ubidots.zip?raw=true
+
+2. Open the Arduino IDE and go to "Sketch" --> "Import Library" --> "Add Library".
+
+3. Select the downloaded ZIP file
+
+4. Restart the Arduino IDE, you should then see Ubidots examples under "File" --> "Examples" --> "Ubidots"
+
+
 A Quick example
 ----------------
 Here's a quick example of how to use the library, with the serial terminal of Arduino:
