@@ -63,6 +63,7 @@ String Ubidots::get_value(String idvariable)
       while (!_client.available());
 			while (_client.available()) {
         _c = _client.read();
+
      
 			  //this switch is for select the value, is manually cuz if the api change in the future the
         //code will not change	
@@ -138,6 +139,7 @@ boolean Ubidots::save_value(String idvariable,String valor, String ctext)
 			while (!_client.available());
       while (_client.available()) {
         _c = _client.read();
+
        // Serial.print(_c);
 //------------------------------------------------------------------------
 //-------------------"HTTP/1.1" is for get the number-------------- 
@@ -213,6 +215,7 @@ boolean Ubidots::ubitoken()
     while (_client.available()) {
     _c = _client.read();
     
+    
 //---------------------------------------------------------------------------------------------
 //-------------------------- "HTTP/1.1" is for get the number----------------------------
 //---------------------------------------------------------------------------------------------
@@ -257,6 +260,7 @@ check character by character with the string, if is different falg restarts
   } 
   _client.flush();
   _client.stop(); 
+ 
    if (_value=="201" || _value=="200")
   { 
   return true;  
@@ -318,6 +322,7 @@ boolean Ubidots::WifiCon(char *ssid,char *pass,int status, String api)
     Serial.println("\nConnection failed, restarting connection...");
     response=ubitoken();
   }  
+
   return response;  
 }
 
