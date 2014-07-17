@@ -26,44 +26,67 @@ Here's a quick example of how to use the library, with the serial terminal of Ar
 
 .. code-block:: cpp
 
-   #include <WiFi.h>
-   #include <Ubidots.h>
-
-    char ssid[] = "Atom House Medellin";                    //  your network SSID (name) 
-    char pass[] = "atommed2014";                            // your network password (use for WPA, or use as key for WEP)
-    String api="5ca9b10038e49e0492c6794f9043f0918ddcbd26";  //your API Key number
-    String idvari = "53baaf3c76254244e1c8e408";             // The number of the Ubidots variable
-    String ctext=", \"context\":{\"color\":\"blue\",\"status\":\"active\"}}";
-    Ubidots ubiclient(api);                                 // with that you call the api with the prefix ubiclient
+   /*
+      Wifi Ubidots serial Client
+ 
+      This sketch connect to Ubidots (http://www.ubidots.com)
+      using an Arduino Wifi shield.
+ 
+      This example is written for a network using WPA encryption. You only need your SSID and PASS.
+ 
+      This example has new library for Arduino WiFi Shield, for the 1.6 API version.
+      With the get_value fuction you can get the value of the variable, and with save_value you
+      can post on Ubidots in real time.
+ 
+      Circuit:
+      * Arduino Wifi shield
+      * Serial Monitor of Arduino 
+ 
+      Created 9 Jun 2014
+      Modified 17 Jun 2014
+      by Mateo Vélez
+ 
+      This code is in the public domain.
+ 
+    */
+    #include <WiFi.h>
+    #include <Ubidots.h>
+    char ssid[] = "Atom House Medellin";                                                 //your network SSID (name) 
+    char pass[] = "atommed2014";                                                         //your network password (use for WPA, or use as key for WEP)
+    String api = "5ca9b10038e49e0492c6794f9043f0918ddcbd26";                             //your API Key number
+    String idvari = "53baaf3c76254244e1c8e408";                                          //the number of the Ubidots variable
+    String ctext = ", \"context\":{\"color\":\"blue\",\"status\":\"active\"}}";
+    Ubidots ubiclient(api);                                                              //with that you call the api with the prefix ubiclient
 
     void setup()
     {
-     boolean response;                                   // You need boolean variable to save value from WifiCon function (True or False)
-     int status = WL_IDLE_STATUS;                        // we need to define first a WL_IDLE_STATUS for the network
-     Serial.begin(9600);                                 // 9600 baud for serial transmision
-     response=ubiclient.WifiCon(ssid,pass,status,api);   // this function is to connect to your wifi network
-     Serial.println(response);                           //print in the Serial Monitor
+       boolean response;                                                                 //you need boolean variable to save value from WifiCon fuction, (True, False)
+       int status = WL_IDLE_STATUS;                                                      //we need to difine first a WL_IDLE_STATUS for the red
+       Serial.begin(9600);                                                               //9600 baud for serial transmision
+       response = ubiclient.WifiCon(ssid,pass,status,api);                               //this fuction is for connect to your wifi red
+       Serial.println(response);                                                         //print in the Serial Monitor
     }
     void loop()
     {
-    int incomingByte = 100;                                  // this variable is to send or receive a value in ubidots
-    String readvalue="";
-     if (Serial.available()>0)
-    {
-      incomingByte = Serial.read() - 48;                     // Because incomingByte is integer, you need to change this value to an ascii number and then substract 48
-      if (incomingByte>0)
+      int incomingByte = 100;                                                            //this variable is for send or receive value in ubidots
+      String readvalue = "";
+       if (Serial.available()>0)
       {
-         if (ubiclient.save_value(idvari,String(incomingByte))) //this function is to post the value to Ubidots, and return True or False if the communication is successful
-         {
-           Serial.println("Ok");                            // print OK in the monitor when the value is changed in ubidots
-         }
+        Serial.println("Enter 0 to get the data, or any number between 1 and 9 to post it to Ubidots");
+        incomingByte = Serial.read()-48;                                                 //how incomingByte is integer, you need change this value to ascii number then you need rest 48
+        if (incomingByte>0)
+        {
+           if (ubiclient.save_value(idvari,String(incomingByte),ctext))                  //this fucion is for post on ubidots, and return True or False depending on if the communication is right
+           {
+             Serial.println("Ok");                                                       //print OK in the monitor when the value is changed in ubidots
+           }
+        }
+        if (incomingByte == 0)
+        {
+         readvalue = ubiclient.get_value(idvari);                                        //this fuction is for get value from ubidots
+         Serial.println(readvalue);                                                      //print the value in the serial monitor
+        }
       }
-      if (incomingByte==0)
-      {
-       readvalue=ubiclient.get_value(idvari);               // this function is to get a value from ubidots
-       Serial.println(readvalue);                           // print the value in the serial monitor
-      }
-    }
     }
 
 
