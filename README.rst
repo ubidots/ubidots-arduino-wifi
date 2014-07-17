@@ -175,3 +175,9 @@ String          api          Your API Key number
 
 This Function is to connect to your WiFi network, after connection it creates a token using the API key. 
 Returns a boolean (true or false) depending on whether the token is obtained or not. 
+
+
+.. figure:: /_static/devices/arduino-uno-wifi.png
+    :name: arduino-uno-wifi
+    :align: right
+    :alt: Arduino Uno + WiFi Shield
