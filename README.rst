@@ -101,7 +101,7 @@ save_value()
 ````````````````````
 .. code-block:: cpp
 
-    boolean=ubiclient.save_value(idvari,String(incomingByte),ctext)
+    boolean = ubiclient.save_value(idvari, String(incomingByte), ctext)
 =======  ============  ===================================
 Type     Argument      Description
 =======  ============  ===================================
@@ -116,13 +116,13 @@ Please pay close attention to the format of ctext:
 
 .. code-block:: cpp
 
-   String ctext="{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
+   String ctext = "{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
 
 Example:
 
 .. code-block:: cpp
 
-  String ctext="{\"color\":\"blue\",\"status\":\"active\"}";
+  String ctext = "{\"color\":\"blue\",\"status\":\"active\"}";
    
 Sending the context is only an option; it's not mandatory.
 
@@ -130,7 +130,7 @@ get_value()
 ```````````
 .. code-block:: cpp
 
-    readvalue=ubiclient.get_value(idvari);
+    readvalue = ubiclient.get_value(idvari);
 
 ==================  ===========  =============================================
 Type                Argument     Description
@@ -144,7 +144,7 @@ WifiCon()
 `````````
 .. code-block:: c
 
-    response=ubiclient.WifiCon(ssid,pass,status,api);
+    response = ubiclient.WifiCon(ssid, pass, status, api);
 
 ==============  ===========  =================================================
 Type            Argument     Description
@@ -157,9 +157,3 @@ String          api          Your API Key number
 
 This Function is to connect to your WiFi network, after connection it creates a token using the API key. 
 Returns a boolean (true or false) depending on whether the token is obtained or not. 
-
-
-.. figure:: /_static/devices/arduino-uno-wifi.png
-    :name: arduino-uno-wifi
-    :align: right
-    :alt: Arduino Uno + WiFi Shield
