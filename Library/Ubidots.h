@@ -15,6 +15,7 @@ class Ubidots {
   public:
    Ubidots(String apikey);
    String get_value(String idvariable);
+   boolean save_value(String idvariable,String valor);
    boolean save_value(String idvariable,String valor,String ctext);
    boolean ubitoken();
    boolean WifiCon(char *ssid,char *pass,int status, String api);  
