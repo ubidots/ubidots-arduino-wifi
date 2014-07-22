@@ -77,7 +77,7 @@ Here's a quick example of how to use the library, with the serial terminal of Ar
         if (incomingByte>0)
         {
            if (ubiclient.save_value(idvari,String(incomingByte),ctext))                  //this fucion is for post on ubidots, and return True or False depending on if the communication is right
-           {
+           {                                                                             //now ctext is optional
              Serial.println("Ok");                                                       //print OK in the monitor when the value is changed in ubidots
            }
         }
@@ -90,27 +90,20 @@ Here's a quick example of how to use the library, with the serial terminal of Ar
     }
 
 
-Please pay close attention to the format of ctext, 
+Please pay close attention to the format of ctext:
 
 .. code-block:: cpp
 
-   String ctext=",  \"context\":{\"color\":\"blue\",\"status\":\"active\"}}";
+   String ctext="{\"color\":\"blue\",\"status\":\"active\"}";
 
-It is required to send "}",  or the function will not work , the format of the content text is  ", \"context\":{}}" inside the brackets you can add the information to the feature you want, as long as you follow the format of the example.
 Example:
 You post a context then:
 
 .. code-block:: cpp
 
-   String ctext=",  \"context\":{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}}";
+   String ctext="{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
 
-If you dont need a context then:
-You post a context then:
-
-.. code-block:: cpp
-
-   String ctext="}";
-
+If you dont need a context you dont need send it.
 
 API Reference
 -------------
@@ -134,13 +127,13 @@ save_value()
 .. code-block:: cpp
 
     boolean=ubiclient.save_value(idvari,String(incomingByte),ctext)
-=======  ============  =================================
+=======  ============  ===================================
 Type     Argument      Description
-=======  ============  =================================
+=======  ============  ===================================
 String   idvari        ID of the variable to save
 String   incomingByte  The value of the sensor
-String   ctext         Content text of the value
-=======  ============  =================================
+String   ctext         Content text of the value (optional)
+=======  ============  ====================================
 
 Save a value to Ubidots. Returns true upon success. Returns false upon error.
 
