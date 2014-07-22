@@ -79,20 +79,6 @@ Here's a quick example of how to use the library, with the serial terminal of Ar
     }     
   }
 
-Please pay close attention to the format of ctext:
-
-.. code-block:: cpp
-
-   String ctext="{\"color\":\"blue\",\"status\":\"active\"}";
-
-Example:
-You post a context then:
-
-.. code-block:: cpp
-
-   String ctext="{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
-
-If you dont need a context you dont need send it.
 
 API Reference
 -------------
@@ -125,6 +111,20 @@ String   ctext         Content text of the value (optional)
 =======  ============  ====================================
 
 Save a value to Ubidots. Returns true upon success. Returns false upon error.
+
+Please pay close attention to the format of ctext:
+
+.. code-block:: cpp
+
+   String ctext="{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
+
+Example:
+
+.. code-block:: cpp
+
+  String ctext="{\"color\":\"blue\",\"status\":\"active\"}";
+   
+Sending the context is only an option; it's not mandatory.
 
 get_value()
 ```````````
