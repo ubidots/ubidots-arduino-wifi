@@ -289,6 +289,7 @@ boolean Ubidots::ubitoken()
     while (!_client.available());     
     while (_client.available()) {
     _c = _client.read();
+    Serial.print(_c);
     
     
 //---------------------------------------------------------------------------------------------
