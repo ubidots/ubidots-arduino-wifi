@@ -1,5 +1,5 @@
-Ubidots-Arduino
-===============
+Ubidots-Arduino-WiFi
+====================
 
 Ubidots-Arduino is an Arduino library for interacting with Ubidots through its API. 
 The library also contains the code to connect to your WiFi network.
