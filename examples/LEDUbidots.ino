@@ -24,7 +24,7 @@
 #include <Ubidots.h>
 char ssid[] = "Atom House Medellin";                                    //your network SSID (name) 
 char pass[] = "atommed2014";                                            //your network password (use for WPA, or use as key for WEP)
-String api = "5ca9b10038e49e0492c6794f9043f0918ddcbd26";                //your API Key number
+String api = "xxxxxxxxe0492c6794f9043f0918ddcbd26";                //your API Key number
 String idvari = "53beeca07625420bde83ce29";                             //the number of the Ubidots variable
 
 Ubidots ubiclient(api);                                                 //with that you call the api with the prefix ubiclient
