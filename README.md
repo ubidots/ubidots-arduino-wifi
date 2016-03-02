@@ -1,5 +1,4 @@
-Ubidots-Arduino-WiFi
-====================
+# Arduino YÚN 
 
 Ubidots-Arduino is an Arduino library for interacting with Ubidots through its API. 
 The library also contains the code to connect to your WiFi network.
@@ -7,153 +6,146 @@ The library also contains the code to connect to your WiFi network.
 Note: This code has been tested ONLY with the official Arduino WiFi Shield: http://arduino.cc/en/Main/ArduinoWiFiShield
 We can't guarantee that it will work with different WiFi modules.
 
-Install the Library
--------------------
+## Requiremets
 
-1. Download the library as a ZIP file here: https://github.com/ubidots/ubidots-arduino/blob/master/Library/Ubidots.zip?raw=true
-
-2. Open the Arduino IDE and go to "Sketch" --> "Import Library" --> "Add Library".
-
-3. Select the downloaded ZIP file
-
-4. Restart the Arduino IDE, you should then see Ubidots examples under "File" --> "Examples" --> "Ubidots"
+* [Arduino UNO](https://www.arduino.cc/en/Main/ArduinoBoardUno)
+* [Arduino WiFi Shield](https://www.arduino.cc/en/Main/ArduinoWiFiShield)
+* [Arduino IDE 1.6.5 or higher](https://www.arduino.cc/en/Main/Software)
+* [UbidotsArduini library](https://github.com/ubidots/ubidots-arduino-yun/archive/master.zip)
+* []()
+## Setup
 
 
-A Quick example
-----------------
-Here's a quick example of how to use the library, with the serial terminal of Arduino:
+1. Download the UbidotsArduino library [here](https://github.com/ubidots/ubidots-arduino-wifi/archive/master.zip)
+2. Go to the Arduino IDE, click on **Sketch -> Include Library -> Add .ZIP Library**
+3. Select the .ZIP file of Ubidots_FONA and then "Accept" or "Choose"
+4. Do the same to add the Adafruit_FONA library.
+5. Close the Arduino IDE and open it again.
+
+<aside class="alert">
+Use the Arduino 1.6.5 version or newer with the Arduino YÚN.
+</aside>
+<aside class="warning">
+NOTE: this product is currently retired by Arduino and the documentation will not be kept up-to-date 
+</aside>
+    
+## Send one value to Ubidots
+
+To send a value to Ubidots, go to **Sketch -> Examples -> UbidotsArduino library** and select the "saveValue" example. 
+Put your Ubidots token and variable ID where indicated, as well as the WiFi settings.
+Upload the code, open the Serial monitor to check the results. If no response is seen, try unplugging your Arduino and then plugging it again. Make sure the baud rate of the Serial monitor is set to the same one specified in your code.
+
+```c++
+
+#include <SPI.h>
+#include <WiFi.h>
+
+#include <UbidotsArduino.h>
+#define ID  "Your_variable_ID_here"  // Put here your Ubidots variable ID
+#define TOKEN  "Your_token_here"  // Put here your Ubidots TOKEN
 
 
-.. code-block:: cpp
+char ssid[] = "yourNetwork"; //  your network SSID (name)
+char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
-  /*
-  Analog Read example for Ubidots 
+int status = WL_IDLE_STATUS;
 
-  This sketch connects to Ubidots (http://www.ubidots.com) using an Arduino Wifi shield.
+Ubidots client(TOKEN);
 
-  This example is written for a network using WPA encryption. You only need your SSID and PASS.
+void setup(){
+    Serial.begin(9600);
+    while (!Serial) {
+        ; // wait for serial port to connect. Needed for native USB port only
+    }
 
-  This example uses Ubidots official library for Arduino WiFi Shield, for the Ubidots API v1.6.
+    // check for the presence of the shield:
+    if (WiFi.status() == WL_NO_SHIELD) {
+        Serial.println("WiFi shield not present");
+        // don't continue:
+        while (true);
+    }
 
-  With this example you can read an analog sensor with the arduino, and post it
-  to the Ubidots platform with the function save_value 
+    String fv = WiFi.firmwareVersion();
+    if (fv != "1.1.0") {
+        Serial.println("Please upgrade the firmware");
+    }
 
-  Components:
-  * Arduino Wifi shield
-  * Serial Monitor in your Arduino IDE
+    // attempt to connect to Wifi network:
+    while (status != WL_CONNECTED) {
+        Serial.print("Attempting to connect to SSID: ");
+        Serial.println(ssid);
+        // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+        status = WiFi.begin(ssid, pass);
 
-  Created 9 Jun 2014
-  Modified 9 Jun 2014
-  by Mateo Vélez
-
-  This code is in the public domain.
-
-  */
-  
-  #include <WiFi.h>
-  #include <Ubidots.h>
-  char ssid[] = "Atom House Medellin";                                                 //your network SSID (name) 
-  char pass[] = "atommed2014";                                                         //your network password (use for WPA, or use as key for WEP)
-  String api = "5ca9b10038e49e0492c6794f9043f0918ddcbd26";                             //your API Key number
-  String idvari = "53baaf3c76254244e1c8e408";                                          //the number of the Ubidots variable
-  int sensorValue = 0;                                                                 //variable to store the value coming from the sensor
-  int sensorPin = A0;                                                                  //select your analog pin
-  Ubidots ubiclient(api);                                                              //call the api with the function ubiclient
-  
-   
-  void setup()
-  {
-    boolean response;                                                                 
-    int status = WL_IDLE_STATUS;                                                      //we need to define first a WL_IDLE_STATUS for the network
-    Serial.begin(9600);                                                               //9600 baud for serial transmision
-    response = ubiclient.WifiCon(ssid, pass, status, api);                               //this function is to connect to your wifi network
-    Serial.println(response);                                                         //print response to the Serial Monitor
-  }
-  
-  void loop()
-  {
-    sensorValue = analogRead(sensorPin); 
-    if (ubiclient.save_value(idvari, String(sensorValue)))                         //this function is to post to ubidots and return True or False depending on the connection status
-    {
-      Serial.println("The sensor value " + String(sensorValue) + " was sent to Ubidots");                //print the sensor value     
-    }     
-  }
+        // wait 10 seconds for connection:
+        delay(10000);
+    }
+        
+}
+void loop(){
+        float value = analogRead(A0);
+        client.add(ID, value);
+        client.sendAll();
+}
+```
 
 
-API Reference
--------------
+## Get one value from Ubidots
 
-Ubidots ubiclient():
-````````````````````
-.. code-block:: cpp
+To get the last value of a variable from Ubidots, go to **Sketch -> Examples -> UbidotsArduino library** and select the "getValue" example. 
+Put your Ubidots token and variable ID where indicated, as well as the WiFi settings.
+Upload the code, open the Serial monitor to check the results. If no response is seen, try unplugging your Arduino and then plugging it again. Make sure the baud rate of the Serial monitor is set to the same one specified in your code.
 
-    Ubidots ubiclient(api);
+```c++
 
-=======  ========  =================================
-Type     Argument  Description
-=======  ========  =================================
-String   api       Your API key for the Ubidots API
-=======  ========  =================================
+#include <SPI.h>
+#include <WiFi.h>
 
-Initialize a Ubidots client. This is most likely to be the first Ubidots library function to call.
+#include <UbidotsArduino.h>
+#define ID  "Your_variable_ID_here"  // Put here your Ubidots variable ID
+#define TOKEN  "Your_token_here"  // Put here your Ubidots TOKEN
 
-save_value()
-````````````````````
-.. code-block:: cpp
 
-    boolean = ubiclient.save_value(idvari, String(incomingByte), ctext)
-=======  ============  ===================================
-Type     Argument      Description
-=======  ============  ===================================
-String   idvari        ID of the variable to save
-String   incomingByte  The value of the sensor
-String   ctext         Content text of the value (optional)
-=======  ============  ====================================
+char ssid[] = "yourNetwork"; //  your network SSID (name)
+char pass[] = "secretPassword";    // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;            // your network key Index number (needed only for WEP)
 
-Save a value to Ubidots. Returns true upon success. Returns false upon error.
+int status = WL_IDLE_STATUS;
 
-Please pay close attention to the format of ctext:
+Ubidots client(TOKEN);
 
-.. code-block:: cpp
+void setup(){
+	Serial.begin(9600);
+	while (!Serial) {
+		; // wait for serial port to connect. Needed for native USB port only
+	}
 
-   String ctext = "{\"attribute\":\"attribute_value\",\"attribute\":\"attribute_value_2\"}";
+	// check for the presence of the shield:
+	if (WiFi.status() == WL_NO_SHIELD) {
+		Serial.println("WiFi shield not present");
+		// don't continue:
+		while (true);
+	}
 
-Example:
+	String fv = WiFi.firmwareVersion();
+	if (fv != "1.1.0") {
+		Serial.println("Please upgrade the firmware");
+	}
 
-.. code-block:: cpp
+	// attempt to connect to Wifi network:
+	while (status != WL_CONNECTED) {
+		Serial.print("Attempting to connect to SSID: ");
+		Serial.println(ssid);
+		// Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+		status = WiFi.begin(ssid, pass);
 
-  String ctext = "{\"color\":\"blue\",\"status\":\"active\"}";
-   
-Sending the context is only an option; it's not mandatory.
-
-get_value()
-```````````
-.. code-block:: cpp
-
-    readvalue = ubiclient.get_value(idvari);
-
-==================  ===========  =============================================
-Type                Argument     Description
-==================  ===========  =============================================
-String              idvari       ID of the variable that you want make request 
-==================  ===========  =============================================
-
-Get value from Ubidots. Returns a String containing the last value of the variable.
-
-WifiCon()
-`````````
-.. code-block:: c
-
-    response = ubiclient.WifiCon(ssid, pass, status, api);
-
-==============  ===========  =================================================
-Type            Argument     Description
-==============  ===========  =================================================
-String          ssid         The SSID of your WiFi network
-String          pass         The pass of your WiFi network
-String          status       is the value of the initialization status of WiFi
-String          api          Your API Key number
-==============  ===========  =================================================
-
-This Function is to connect to your WiFi network, after connection it creates a token using the API key. 
-Returns a boolean (true or false) depending on whether the token is obtained or not. 
+		// wait 10 seconds for connection:
+		delay(10000);
+	}
+		
+}
+void loop(){
+		float value = client.getValue(ID);
+}
+```
