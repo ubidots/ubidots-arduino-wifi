@@ -11,7 +11,7 @@ We can't guarantee that it will work with different WiFi modules.
 * [Arduino UNO](https://www.arduino.cc/en/Main/ArduinoBoardUno)
 * [Arduino WiFi Shield](https://www.arduino.cc/en/Main/ArduinoWiFiShield)
 * [Arduino IDE 1.6.5 or higher](https://www.arduino.cc/en/Main/Software)
-* [UbidotsArduini library](https://github.com/ubidots/ubidots-arduino-yun/archive/master.zip)
+* [UbidotsArduino library](https://github.com/ubidots/ubidots-arduino-wifi/archive/master.zip)
 * []()
 ## Setup
 
