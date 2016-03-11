@@ -4,10 +4,9 @@
  */
 Ubidots::Ubidots(char* token){
     _token = token;
-    maxValues = 4;
+    maxValues = 5;
     currentValue = 0;
     val = (Value *)malloc(maxValues*sizeof(Value));
-    status = WL_IDLE_STATUS;
 }
 /** 
  * This function is to get value from the Ubidots API
@@ -16,11 +15,11 @@ Ubidots::Ubidots(char* token){
  */
 float Ubidots::getValue(char* id){
   float num;
-  int i = 0;
   String raw;
+  char reply[500];
+  int i = 0;
   uint8_t bodyPosinit;
   uint8_t bodyPosend;
-  char reply[15];
   _client.connect(SERVER, PORT);
   if (_client.connected()){
         Serial.println(F("Geting your variable"));
@@ -29,7 +28,7 @@ float Ubidots::getValue(char* id){
         _client.print(id);
         _client.println(F("/values?page_size=1 HTTP/1.1"));
         _client.println(F("Host: things.ubidots.com"));
-        _client.println(F("User-Agent: Arduino-WiFi/1.0"));
+        _client.println(F("User-Agent: Arduino-Ethernet/1.0")); 
         _client.print(F("X-Auth-Token: "));
         _client.println(_token);
         _client.println(F("Connection: close"));
@@ -41,12 +40,22 @@ float Ubidots::getValue(char* id){
     }
     while (!_client.available());
     while (_client.available()){
-        char c = _client.read();
-        Serial.write(c);
+        reply[i] = _client.read();
+        i++;
+        if(i>=499){
+          i = 0;
+          break;
+        }
+        //Serial.write(c);
     }
-    Serial.println();
-    num = atof(reply); 
     _client.stop();
+    Serial.println(reply);
+    char* pch = strstr(reply,"\"value\":");
+    raw = String(pch);
+    bodyPosinit =9+ raw.indexOf("\"value\":");
+    bodyPosend = raw.indexOf(", \"timestamp\"");
+    raw.substring(bodyPosinit,bodyPosend).toCharArray(reply, 10);
+    num = atof(reply);      
     return num;
 }
 /**
@@ -69,33 +78,39 @@ void Ubidots::add(char *variable_id, double value){
  */
 bool Ubidots::sendAll(){
     int i;
-    char vals[10];
-    char mess[800];
-    char data[250];
-    String message;  
-    sprintf(data,"[");
+    String all;
+    String str;
+    char b[3];
+    all = "[";
     for(i=0; i<currentValue;){
-      dtostrf((val + i)->value_id, 10, 3, vals);
-      sprintf(data, "%s{\"variable\": \"%s\", \"value\":\"%s\"}", data, (val + i)->id, vals);
-      i++;
-      if(i<currentValue){
-        sprintf(data,"%s, ", data);
-      }
+        str = String(((val+i)->value_id),5);
+        all += "{\"variable\": \"";
+        all += String((val + i)->id);
+        all += "\", \"value\":";
+        all += str;
+        all += "}";
+        i++;
+        if(i<currentValue){
+            all += ", "; 
+        }
     }
-    sprintf(data, "%s]", data);
-    sprintf(mess,"POST /api/v1.6/collections/values/?force=true HTTP/1.1\nHost: things.ubidots.com\nUser-Agent: User-Agent: Arduino-Ethernet/1.0\nX-Auth-Token: %s\nConnection: close", _token);
+    all += "]";
+    i = all.length();
     
-    sprintf(mess,"%s\nContent-Type: application/json\nContent-Length:  %d\n\n%s\n",mess, strlen(data), data);
-      _client.connect(SERVER, PORT);
-    if (_client.connected()){
+    if (_client.connect(SERVER, PORT)){
           Serial.println(F("Posting your variables"));
-          // Make a HTTP request:
-          _client.println(mess);
-          
-    }else{
-          Serial.println(F("Connection failed"));  
-          currentValue = 0;  
-          return NULL;
+          _client.println(F("POST /api/v1.6/collections/values/?force=true HTTP/1.1"));
+          _client.println(F("Host: things.ubidots.com"));
+          _client.println(F("User-Agent: Arduino-Ethernet/1.0"));
+          _client.print(F("X-Auth-Token: "));
+          _client.println(_token);
+          _client.println(F("Connection: close"));
+          _client.println(F("Content-Type: application/json"));
+          _client.print(F("Content-Length: "));
+          _client.println(String(i));
+          _client.println();
+          _client.println(all);
+          _client.println();          
     }
     while (!_client.available());
     while (_client.available()){
@@ -103,5 +118,6 @@ bool Ubidots::sendAll(){
         Serial.write(c);
     }
     currentValue = 0;
+    _client.stop();
     return true;    
 }

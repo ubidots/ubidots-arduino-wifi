@@ -30,7 +30,7 @@ class Ubidots {
       uint8_t maxValues;
       uint8_t currentValue;
       Value * val;
-      WiFiClient client;
+      WiFiClient _client;
    
 };
 
