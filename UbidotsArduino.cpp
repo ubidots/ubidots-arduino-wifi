@@ -40,14 +40,14 @@ Ubidots::Ubidots(char* token) {
  * @return num the data that you get from the Ubidots API
  */
 float Ubidots::getValue(char* id) {
-  float num;
-  String raw;
-  char reply[500];
-  int i = 0;
-  uint8_t bodyPosinit;
-  uint8_t bodyPosend;
-  _client.connect(SERVER, PORT);
-  if (_client.connected()) {
+    float num;
+    String raw;
+    char reply[500];
+    int i = 0;
+    uint8_t bodyPosinit;
+    uint8_t bodyPosend;
+    _client.connect(SERVER, PORT);
+    if (_client.connected()) {
         Serial.println(F("Geting your variable"));
         _client.print(F("GET /api/v1.6/variables/"));
         _client.print(id);
@@ -93,13 +93,13 @@ float Ubidots::getValue(char* id) {
  * @arg value variable value to save in a struct
  */
 void Ubidots::add(char *variable_id, float value) {
-  (val+currentValue)->id = variable_id;
-  (val+currentValue)->value_id = value;
-  currentValue++;
-  if (currentValue > maxValues) {
-      Serial.println(F("You are sending more than 5 consecutives variables, you just could send 5 variables. Then other variables will be deleted!"));
-      currentValue = maxValues;
-  }
+    (val+currentValue)->id = variable_id;
+    (val+currentValue)->value_id = value;
+    currentValue++;
+    if (currentValue > maxValues) {
+        Serial.println(F("You are sending more than 5 consecutives variables, you just could send 5 variables. Then other variables will be deleted!"));
+        currentValue = maxValues;
+    }
 }
 /**
  * Send all data of all variables that you saved
