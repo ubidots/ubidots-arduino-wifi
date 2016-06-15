@@ -148,7 +148,7 @@ void setup(){
 void loop(){
     float value;
     if (client.getValue(ID)) {  // If you get a connection fail getValue will be FALSE
-        value = variableValue;
+        value = client.variableValue;
     }
 }
 ```
