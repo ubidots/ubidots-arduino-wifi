@@ -42,7 +42,8 @@ class Ubidots {
  public:
     Ubidots(char* token, char* server = SERVER);
     bool sendAll();
-    bool getValue(char* id, float num = 0);
+    bool getValue(char* id);
+    float variableValue;
     void add(char *variable_id, float value);
 
  private:

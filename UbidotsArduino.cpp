@@ -30,6 +30,7 @@ Made by Mateo Velez - Metavix for Ubidots Inc
  */
 Ubidots::Ubidots(char* token, char* server) {
     _token = token;
+    variableValue = 0; 
     _server = server;
     currentValue = 0;
     val = (Value *)malloc(MAX_VALUES*sizeof(Value));
@@ -39,7 +40,7 @@ Ubidots::Ubidots(char* token, char* server) {
  * @arg id the id where you will get the data
  * @return true uppon succes
  */
-bool Ubidots::getValue(char* id, float num) {
+bool Ubidots::getValue(char* id) {
     String raw;
     char reply[500];
     int i = 0;
@@ -82,7 +83,7 @@ bool Ubidots::getValue(char* id, float num) {
     bodyPosinit = 9 + raw.indexOf("\"value\":");
     bodyPosend = raw.indexOf(", \"timestamp\"");
     raw.substring(bodyPosinit, bodyPosend).toCharArray(reply, 10);
-    num = atof(reply);
+    variableValue = atof(reply);
     return true;
 }
 /**
