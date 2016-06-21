@@ -46,7 +46,15 @@ void setup(){
 		
 }
 void loop(){
-		float value = client.getValue(ID);
+	float *responseArray;
+	float value;
+	responseArray = client.getValue(ID);
+	// The library return a verify float in the first position, 0 when
+	// it doesn't get the value and 1 when it get the value
+	// in the second position is the value 
+	if (responseArray[0] == 1) {
+		value = responseArray[1];
+	}
 }
 
 
