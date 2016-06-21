@@ -44,8 +44,8 @@ Ubidots::Ubidots(char* token, char* server) {
  */
 
 /** 
- * This function is to get on dot from the Ubidots API
- * @arg dot is pointer to struct dot_t
+ * This function is to get variable information from the Ubidots API
+ * @arg dot is pointer to struct ubi_value
  * @return dot->value, the float value of the dot you get from the Ubidots API
  * The struct dot is updated, providing access to:
  * dot->value       := (float) value of datadot
@@ -53,19 +53,19 @@ Ubidots::Ubidots(char* token, char* server) {
  * dot->timestamp   := timestamp in SECONDS
  * dot->valid       := reading valid 
  * Example Code for Arduino:
-  dot_t Dot_Switch = {"575e754d76254211xxxxxxxx", 0.0, 0L, false};  // Ubidots Dot for "Switch" 
+  ubi_value ubi_struct = {"575e754d76254211xxxxxxxx", 0.0, 0L, false};  // Ubidots struct for "Switch" 
   float value;
 
-  value=client.getDot(&Dot_Switch); // This is the important call
+  value=client.getValueInfo(&ubi_struct); // This is the important call
 
-  if (Dot_Switch.valid){  // Ubidot Value is valid
-      Serial.print(" Dot_Switch: "+String(Dot_Switch.value,DEC)+" Count:"+String(Dot_Switch.count,DEC)+" timestamp[s]:"+String(Dot_Switch.timestamp,DEC));
+  if (ubi_struct.valid){  // Ubidot Value is valid
+      Serial.print(" Ubi_struct: "+String(ubi_struct.value,DEC)+" Count:"+String(ubi_struct.count,DEC)+" timestamp[s]:"+String(ubi_struct.timestamp,DEC));
    } else {
      Serial.println("UBIDOTS: ERROR getDot(Dot_Switch) ");
    }
 *
 **/
-void Ubidots::getDot(dot_t* dot) {
+void Ubidots::getValueInfo(ubi_value* dot) {
     String raw;
     char reply[500];
     int i = 0;
@@ -98,11 +98,11 @@ void Ubidots::getDot(dot_t* dot) {
             Serial.println(F("ERROR: Wating for client timed out"));
             break;
         }
-    }       
+    }
     while (_client.available()) {
         reply[i] = _client.read();
         i++;
-        if(i >= 499){
+        if(i >= 499) {
           i = 0;
           break;
         }

@@ -47,20 +47,20 @@ typedef struct Value {
 } Value;
 
 // Struct added by Dr. Juergen Leib
-typedef struct dot_t {
+typedef struct ubi_value {
   char  *id;
   float value;
   unsigned long count;
   unsigned long timestamp;
   bool  valid;
-} dot_t;
+} ubi_value;
 
 class Ubidots {
  public:
     Ubidots(char* token, char* server = SERVER);
     bool sendAll();
     float * getValue(char* id);
-    void getDot(dot_t* dot);  // Function added by Dr. Juergen Leib
+    void getValueInfo(dot_t* dot);  // Function added by Dr. Juergen Leib
     void add(char *variable_id, float value);
 
  private:
