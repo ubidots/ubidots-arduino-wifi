@@ -160,7 +160,7 @@ float * Ubidots::getValue(char* id) {
         return arrayResponse;
     }
     int timeout = 0;
-    while (!_client.available() && timeout > 5000) {
+    while (!_client.available() && timeout < 5000) {
         delay(1);
         timeout++;
     }
@@ -237,7 +237,7 @@ bool Ubidots::sendAll() {
         _client.println();
     }
     int timeout = 0;
-    while (!_client.available() && timeout > 5000) {
+    while (!_client.available() && timeout < 5000) {
         delay(1);
         timeout++;
     }
