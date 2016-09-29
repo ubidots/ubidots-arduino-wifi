@@ -40,6 +40,8 @@ Made by Mateo Velez - Metavix for Ubidots Inc
 #define SERVER "things.ubidots.com"
 #define PORT 80
 #define MAX_VALUES 5
+#define VERSION "1.1"
+#define META_DEBUG
 
 typedef struct Value {
   char  *id;
