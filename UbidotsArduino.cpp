@@ -208,14 +208,14 @@ bool Ubidots::sendAll() {
     uint8_t size = 0;
     httpHeaders = "POST /api/v1.6/collections/values/?force=true HTTP/1.1\r\n";
     httpHeaders += "Host: things.ubidots.com\r\n";
-    httpHeaders += "User-Agent: Arduino-WiFi/" + VERSION +"\r\n";
-    httpHeaders += "X-Auth-Token: " + _token + "\r\n";
+    httpHeaders += "User-Agent: Arduino-WiFi/" + String(VERSION) +"\r\n";
+    httpHeaders += "X-Auth-Token: " + String(_token) + "\r\n";
     httpHeaders += "Connection: close\r\n";
     httpHeaders += "Content-Type: application/json\r\n";
     payload = "[";
     for (int i = 0; i < currentValue; ) {
         str = String(((val+i)->value_id), 2);
-        payload += "{\"variable\": \"" + (val + i)->id +"\", \"value\":"+ str +"}";
+        payload += "{\"variable\": \"" + String((val + i)->id) +"\", \"value\":"+ str +"}";
         i++;
         if (i < currentValue) {
             payload += ", ";
@@ -233,7 +233,7 @@ bool Ubidots::sendAll() {
 
     if (_client.connect(_server, PORT)) {
         Serial.println(F("The TCP socket is opened"));
-        _client.println(httpHeaders)
+        _client.println(httpHeaders);
         _client.flush();
     }
     int timeout = 0;
