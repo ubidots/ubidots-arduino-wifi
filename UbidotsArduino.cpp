@@ -234,7 +234,7 @@ bool Ubidots::sendAll() {
         Serial.println(F("The TCP socket is opened"));
         _client.write(httpHeaders);
         _client.write(payload);
-        _client.println();
+        _client.println("\r\n");
     }
     int timeout = 0;
     while (!_client.available() && timeout < 5000) {
