@@ -235,8 +235,10 @@ bool Ubidots::sendAll() {
         _client.write(httpHeaders);
         _client.write(payload);
         _client.println("\r\n");
+        _client.flush();
     }
     int timeout = 0;
+    delay(100);
     while (!_client.available() && timeout < 5000) {
         delay(1);
         timeout++;
