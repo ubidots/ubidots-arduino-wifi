@@ -81,7 +81,7 @@ void Ubidots::getValueInfo(ubi_value* dot) {
         _client.print(id);
         _client.println(F("/values?page_size=1 HTTP/1.1"));
         _client.println(F("Host: things.ubidots.com"));
-        _client.println(F("User-Agent: Arduino-Ethernet/1.0"));
+        _client.println(F("User-Agent: Arduino-WiFi/1.0"));
         _client.print(F("X-Auth-Token: "));
         _client.println(_token);
         _client.println(F("Connection: close"));
@@ -150,7 +150,7 @@ float * Ubidots::getValue(char* id) {
         _client.print(id);
         _client.println(F("/values?page_size=1 HTTP/1.1"));
         _client.println(F("Host: things.ubidots.com"));
-        _client.println(F("User-Agent: Arduino-Ethernet/1.0"));
+        _client.println(F("User-Agent: Arduino-WiFi/1.0"));
         _client.print(F("X-Auth-Token: "));
         _client.println(_token);
         _client.println(F("Connection: close"));
