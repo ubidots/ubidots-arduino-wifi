@@ -30,12 +30,7 @@ Made by Mateo Velez - Metavix for Ubidots Inc
 #include <string.h>
 #include <SPI.h>
 
-
-#if defined(__AVR_ATmega328P__)||defined(__AVR_ATmega32U4__)||defined(__AVR_ATmega2560__)||defined (__AVR_ATtiny85__)
-    #include <WiFi.h>
-#else
-    #include "WiFi101.h"
-#endif
+#include <WiFi.h>
 
 #define SERVER "things.ubidots.com"
 #define PORT 80
