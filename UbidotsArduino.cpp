@@ -202,39 +202,38 @@ void Ubidots::add(char *variable_id, float value) {
  * @reutrn true upon success, false upon error.
  */
 bool Ubidots::sendAll() {
-    char payload[250];
-    char httpHeaders[250];
+    String payload;
+    String httpHeaders;
     String str;
     uint8_t size = 0;
-    sprintf(httpHeaders, "POST /api/v1.6/collections/values/?force=true HTTP/1.1\r\n");
-    sprintf(httpHeaders, "%sHost: things.ubidots.com\r\n", httpHeaders);
-    sprintf(httpHeaders, "%sUser-Agent: Arduino-WiFi/%s\r\n", httpHeaders, VERSION);
-    sprintf(httpHeaders, "%sX-Auth-Token: %s\r\n", httpHeaders, _token);
-    sprintf(httpHeaders, "%sConnection: close\r\n", httpHeaders);
-    sprintf(httpHeaders, "%sContent-Type: application/json\r\n", httpHeaders);
-    sprintf(payload, "[");
+    httpHeaders = "POST /api/v1.6/collections/values/?force=true HTTP/1.1\r\n";
+    httpHeaders += "Host: things.ubidots.com\r\n";
+    httpHeaders += "User-Agent: Arduino-WiFi/" + VERSION +"\r\n";
+    httpHeaders += "X-Auth-Token: " + _token + "\r\n";
+    httpHeaders += "Connection: close\r\n";
+    httpHeaders += "Content-Type: application/json\r\n";
+    payload = "[";
     for (int i = 0; i < currentValue; ) {
         str = String(((val+i)->value_id), 2);
-        sprintf(payload, "%s{\"variable\": \"{%s}\", \"value\":%s}", payload, (val + i)->id, str.c_str());
+        payload += "{\"variable\": \"{" + (val + i)->id +"}\", \"value\":"+ str +"}";
         i++;
         if (i < currentValue) {
-            sprintf(payload, "%s, ", payload);
+            payload += ", ";
         }
     }
-    sprintf(payload, "%s]", payload);
-    size = strlen(payload);
-    sprintf(httpHeaders, "%sContent-Length: %s\r\n\r\n", httpHeaders, String(size).c_str());
+    payload += "]\r\n";
+    size = payload.length();
+    httpHeaders += "Content-Length: "+ String(size) +"\r\n\r\n";
 #ifdef META_DEBUG
     Serial.println("The full HTTP is: ");
     Serial.print(httpHeaders);
     Serial.println(payload);
+    httpHeaders += payload;
 #endif
 
     if (_client.connect(_server, PORT)) {
         Serial.println(F("The TCP socket is opened"));
-        _client.write(httpHeaders);
-        _client.write(payload);
-        _client.println("\r\n");
+        _client.println(httpHeaders)
         _client.flush();
     }
     int timeout = 0;
