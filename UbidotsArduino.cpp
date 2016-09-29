@@ -215,7 +215,7 @@ bool Ubidots::sendAll() {
     payload = "[";
     for (int i = 0; i < currentValue; ) {
         str = String(((val+i)->value_id), 2);
-        payload += "{\"variable\": \"{" + (val + i)->id +"}\", \"value\":"+ str +"}";
+        payload += "{\"variable\": \"" + (val + i)->id +"\", \"value\":"+ str +"}";
         i++;
         if (i < currentValue) {
             payload += ", ";
