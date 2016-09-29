@@ -202,39 +202,38 @@ void Ubidots::add(char *variable_id, float value) {
  * @reutrn true upon success, false upon error.
  */
 bool Ubidots::sendAll() {
-    int i;
-    String all;
+    char payload[200];
+    char httpHeaders[250];
     String str;
-    char b[3];
-    all = "[";
-    for (i = 0; i < currentValue; ) {
-        str = String(((val+i)->value_id), 5);
-        all += "{\"variable\": \"";
-        all += String((val + i)->id);
-        all += "\", \"value\":";
-        all += str;
-        all += "}";
+    uint8_t size;
+    sprintf(httpHeaders, "POST /api/v1.6/collections/values/?force=true HTTP/1.1\r\n
+                          Host: things.ubidots.com\r\n
+                          User-Agent: Arduino-WiFi/%s\r\n
+                          X-Auth-Token: %s\r\n
+                          Connection: close\r\n
+                          Content-Type: application/json\r\n
+                          Content-Length: %d\r\n\r\n", VERSION, _token, size);
+    sprintf(payload, "[");
+    for (int i = 0; i < currentValue; ) {
+        str = String(((val+i)->value_id), 2);
+        sprintf(payload, "%s{\"variable\": \"{%s\"}, \"value\":%s}", payload, (val + i)->id, str.c_str());
         i++;
         if (i < currentValue) {
-            all += ", ";
+            sprintf(payload, "%s, ", payload);
         }
     }
-    all += "]";
-    i = all.length();
+    sprintf(payload, "%s]", payload);
+#ifdef META_DEBUG
+    Serial.print("The full HTTP is: ");
+    Serial.print(httpHeaders);
+    Serial.println(payload);
+#endif
+    
     if (_client.connect(_server, PORT)) {
-        Serial.println(F("Posting your variables"));
-        _client.println(F("POST /api/v1.6/collections/values/?force=true HTTP/1.1"));
-        _client.println(F("Host: things.ubidots.com"));
-        _client.println(F("User-Agent: Arduino-Ethernet/1.0"));
-        _client.print(F("X-Auth-Token: "));
-        _client.println(_token);
-        _client.println(F("Connection: close"));
-        _client.println(F("Content-Type: application/json"));
-        _client.print(F("Content-Length: "));
-        _client.println(String(i));
-        _client.println();
-        _client.println(all);
-        _client.println();
+        Serial.println(F("The TCP socket is opened"));
+        _client.write(httpHeaders);
+        _client.write(payload);
+
     }
     int timeout = 0;
     while (!_client.available() && timeout < 5000) {
