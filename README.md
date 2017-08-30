@@ -1,6 +1,6 @@
-# Ubidots Arduino WiFi
+# [DEPRECATED] Ubidots Arduino WiFi
 
-The [Arduino Wi-Fi shield](https://store.arduino.cc/usa/arduino-wifi-shield) was retired from commercial sales markets in 2015; for this reason the library is **depracated**
+**WARNING:** The [Arduino Wi-Fi shield](https://store.arduino.cc/usa/arduino-wifi-shield) was retired from commercial sales markets in 2015; for this reason the library is **"DEPRECATED"**
 
 # HTTP requests to Ubidots
 
